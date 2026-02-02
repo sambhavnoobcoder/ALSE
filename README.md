@@ -200,4 +200,4 @@ For questions or feedback, please open an issue or contact [your.email@example.c
 
 ---
 
-**Status**: ✅ Frontier-Lab Ready | **Version**: 3.4b | **Date**: 2026-02-02
+**Status**: ✅ Ready for Evaluation | **Version**: 3.4b | **Date**: 2026-02-02
