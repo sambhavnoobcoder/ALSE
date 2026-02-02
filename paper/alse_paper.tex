@@ -15,7 +15,7 @@
 \usepackage{subcaption}
 \usepackage{algorithm}
 \usepackage{algorithmic}
-\usepackage{natbib}
+\usepackage{cite}
 
 % Page setup
 \usepackage[margin=1in]{geometry}
@@ -40,11 +40,11 @@ Tokenization is a critical preprocessing step in natural language processing, ye
 
 \section{Introduction}
 
-Tokenization—the process of segmenting raw text into discrete units—is fundamental to modern natural language processing. Nearly all contemporary language models rely on subword tokenization algorithms, with Byte Pair Encoding (BPE) \citep{sennrich2016bpe} emerging as the de facto standard. BPE constructs vocabularies through iterative merging of frequent byte pairs, operating as a purely heuristic preprocessing step independent of downstream model training.
+Tokenization—the process of segmenting raw text into discrete units—is fundamental to modern natural language processing. Nearly all contemporary language models rely on subword tokenization algorithms, with Byte Pair Encoding (BPE) \cite{sennrich2016bpe} emerging as the de facto standard. BPE constructs vocabularies through iterative merging of frequent byte pairs, operating as a purely heuristic preprocessing step independent of downstream model training.
 
-This separation between tokenization and modeling presents several limitations. First, BPE vocabularies are fixed after training and cannot adapt to new data distributions or modeling objectives. Second, the greedy merge strategy may not align with optimal segmentations for language modeling. Third, tokenizer mismatch between teacher and student models complicates distillation \citep{sanh2019distilbert}. Finally, the heuristic nature of BPE provides no theoretical guarantees about segmentation quality.
+This separation between tokenization and modeling presents several limitations. First, BPE vocabularies are fixed after training and cannot adapt to new data distributions or modeling objectives. Second, the greedy merge strategy may not align with optimal segmentations for language modeling. Third, tokenizer mismatch between teacher and student models complicates distillation \cite{sanh2019distilbert}. Finally, the heuristic nature of BPE provides no theoretical guarantees about segmentation quality.
 
-Recent work has explored learning tokenization jointly with language models \citep{chung2021byt5, xue2022byt5}, but these approaches either operate at the character level (sacrificing compression) or use separate tokenization networks (adding architectural complexity). Meanwhile, vector quantization has proven effective for learning discrete representations in images \citep{van2017vqvae} and speech \citep{baevski2020wav2vec}, yet remains underexplored for text tokenization.
+Recent work has explored learning tokenization jointly with language models \cite{chung2021byt5, xue2022byt5}, but these approaches either operate at the character level (sacrificing compression) or use separate tokenization networks (adding architectural complexity). Meanwhile, vector quantization has proven effective for learning discrete representations in images \cite{van2017vqvae} and speech \cite{baevski2020wav2vec}, yet remains underexplored for text tokenization.
 
 We introduce \textbf{ALSE (Adaptive Learned Segmentation Encoder)}, a novel tokenization system that learns discrete symbols end-to-end through VQ-VAE with soft segmentation. ALSE addresses the key challenge of differentiable segmentation through three innovations:
 
@@ -76,25 +76,25 @@ These results establish learned tokenization as a viable alternative to heuristi
 
 \subsection{Subword Tokenization}
 
-Byte Pair Encoding (BPE) \citep{sennrich2016bpe} emerged from data compression and has become the dominant tokenization algorithm in NLP. BPE iteratively merges the most frequent byte pairs, constructing vocabularies of varying sizes. WordPiece \citep{schuster2012wordpiece} and Unigram \citep{kudo2018unigram} provide alternative merge strategies but share the limitation of operating as fixed preprocessing steps.
+Byte Pair Encoding (BPE) \cite{sennrich2016bpe} emerged from data compression and has become the dominant tokenization algorithm in NLP. BPE iteratively merges the most frequent byte pairs, constructing vocabularies of varying sizes. WordPiece \cite{schuster2012wordpiece} and Unigram \cite{kudo2018unigram} provide alternative merge strategies but share the limitation of operating as fixed preprocessing steps.
 
-Recent work has explored character-level models that bypass explicit tokenization. ByT5 \citep{xue2022byt5} operates directly on UTF-8 bytes, eliminating tokenization artifacts but requiring longer sequences and more computation. CANINE \citep{clark2022canine} uses downsampling to reduce sequence length but still processes at the character level.
+Recent work has explored character-level models that bypass explicit tokenization. ByT5 \cite{xue2022byt5} operates directly on UTF-8 bytes, eliminating tokenization artifacts but requiring longer sequences and more computation. CANINE \cite{clark2022canine} uses downsampling to reduce sequence length but still processes at the character level.
 
 \subsection{Learned Tokenization}
 
-Several approaches have attempted to learn tokenization jointly with language modeling. \citet{chung2021byt5} explore byte-level models with learned compression, while \citet{wang2022tokenlearner} propose separate tokenization networks. However, these methods either sacrifice compression efficiency or add architectural complexity through auxiliary networks.
+Several approaches have attempted to learn tokenization jointly with language modeling. \cite{chung2021byt5} explore byte-level models with learned compression, while \cite{wang2022tokenlearner} propose separate tokenization networks. However, these methods either sacrifice compression efficiency or add architectural complexity through auxiliary networks.
 
-Most similar to our work, \citet{chirkova2021cpc} use vector quantization for discrete representation learning in language. However, their approach focuses on representation learning rather than tokenization, and does not address the segmentation problem—how to determine token boundaries from raw bytes.
+Most similar to our work, \cite{chirkova2021cpc} use vector quantization for discrete representation learning in language. However, their approach focuses on representation learning rather than tokenization, and does not address the segmentation problem—how to determine token boundaries from raw bytes.
 
 \subsection{Vector Quantization}
 
-VQ-VAE \citep{van2017vqvae} introduced vector quantization for learning discrete latent representations in images, using straight-through estimation to enable gradient flow. This approach has been extended to speech \citep{baevski2020wav2vec} and video \citep{yan2021videogpt}, demonstrating the generality of learned discrete representations.
+VQ-VAE \cite{van2017vqvae} introduced vector quantization for learning discrete latent representations in images, using straight-through estimation to enable gradient flow. This approach has been extended to speech \cite{baevski2020wav2vec} and video \cite{yan2021videogpt}, demonstrating the generality of learned discrete representations.
 
 The key challenge in applying VQ to text tokenization is segmentation: determining where to place token boundaries in variable-length byte sequences. Prior work assumes fixed-length segments or operates on pre-tokenized input. ALSE addresses this through soft segmentation with curriculum learning.
 
 \subsection{Curriculum Learning}
 
-Curriculum learning \citep{bengio2009curriculum} trains models on progressively harder examples, improving convergence and final performance. In our context, we use curriculum learning to transition from forced segmentation boundaries (easy, provides strong training signal) to fully learned boundaries (hard, requires stable training).
+Curriculum learning \cite{bengio2009curriculum} trains models on progressively harder examples, improving convergence and final performance. In our context, we use curriculum learning to transition from forced segmentation boundaries (easy, provides strong training signal) to fully learned boundaries (hard, requires stable training).
 
 \section{Method}
 
@@ -165,7 +165,7 @@ z_k &= \argmin_{v \in \mathcal{C}} \|\mathbf{v}_k - \mathbf{c}_v\|_2 \\
 
 where $\mathcal{C} = \{\mathbf{c}_1, \ldots, \mathbf{c}_V\}$ is a learnable codebook, $d_{\text{code}}=12$, and $V$ is the vocabulary size.
 
-We use straight-through estimation \citep{bengio2013estimating} for backpropagation:
+We use straight-through estimation \cite{bengio2013estimating} for backpropagation:
 \begin{equation}
 \mathbf{v}_k^q = \mathbf{v}_k + \text{sg}[\mathbf{c}_{z_k} - \mathbf{v}_k]
 \end{equation}
@@ -174,7 +174,7 @@ where $\text{sg}[\cdot]$ is the stop-gradient operator.
 
 \subsubsection{Vector Quantization Loss}
 
-Following \citet{van2017vqvae}, we use a combination of codebook and commitment losses:
+Following \cite{van2017vqvae}, we use a combination of codebook and commitment losses:
 \begin{equation}
 \mathcal{L}_{\text{VQ}} = \|\text{sg}[\mathbf{v}_k] - \mathbf{c}_{z_k}\|_2^2 + \beta \|\mathbf{v}_k - \text{sg}[\mathbf{c}_{z_k}]\|_2^2
 \end{equation}
@@ -212,7 +212,7 @@ where $\rho_{\text{target}}$ is the target compression ratio (bytes per token) a
 
 \subsection{Training}
 
-We train ALSE end-to-end using AdamW \citep{loshchilov2019adamw} with learning rate $5 \times 10^{-4}$. The curriculum strength $\alpha$ anneals from 1.0 to 0.35 over 6000 steps. We use dropout (0.3) after encoding and before decoding for regularization.
+We train ALSE end-to-end using AdamW \cite{loshchilov2019adamw} with learning rate $5 \times 10^{-4}$. The curriculum strength $\alpha$ anneals from 1.0 to 0.35 over 6000 steps. We use dropout (0.3) after encoding and before decoding for regularization.
 
 The total training objective is:
 \begin{equation}
@@ -235,11 +235,11 @@ The amortizer is initialized from the trained ALSE model and fine-tuned to match
 
 \subsection{Dataset}
 
-We evaluate ALSE on WikiText-2 \citep{merity2017wikitext}, a standard language modeling benchmark containing Wikipedia articles. We use 1000 training examples ($\sim$800 train, $\sim$200 eval) to enable rapid iteration. While larger datasets would provide stronger results, WikiText-2 allows us to systematically compare ALSE and BPE under controlled conditions. We emphasize that all experiments are intentionally conducted on a small subset of WikiText-2 to enable rapid iteration and controlled comparisons; absolute perplexity values should be interpreted relative to baselines rather than as state-of-the-art results.
+We evaluate ALSE on WikiText-2 \cite{merity2017wikitext}, a standard language modeling benchmark containing Wikipedia articles. We use 1000 training examples ($\sim$800 train, $\sim$200 eval) to enable rapid iteration. While larger datasets would provide stronger results, WikiText-2 allows us to systematically compare ALSE and BPE under controlled conditions. We emphasize that all experiments are intentionally conducted on a small subset of WikiText-2 to enable rapid iteration and controlled comparisons; absolute perplexity values should be interpreted relative to baselines rather than as state-of-the-art results.
 
 \subsection{Baselines}
 
-We compare against Byte Pair Encoding (BPE) \citep{sennrich2016bpe} trained on the same data. For fair comparison, we train BPE tokenizers at vocabulary sizes matching ALSE: 128, 512, and 2048.
+We compare against Byte Pair Encoding (BPE) \cite{sennrich2016bpe} trained on the same data. For fair comparison, we train BPE tokenizers at vocabulary sizes matching ALSE: 128, 512, and 2048.
 
 \subsection{Evaluation Metrics}
 
@@ -368,7 +368,7 @@ Improvement & - & - & -89\% & - & \textbf{-70\%} \\
 
 \subsection{Distillation (PATH B)}
 
-A common challenge in model distillation is tokenizer mismatch: if teacher and student use different tokenizers, knowledge transfer is complicated \citep{sanh2019distilbert}. ALSE's learned tokenization can adapt to match a teacher's distribution.
+A common challenge in model distillation is tokenizer mismatch: if teacher and student use different tokenizers, knowledge transfer is complicated \cite{sanh2019distilbert}. ALSE's learned tokenization can adapt to match a teacher's distribution.
 
 We simulate a distillation scenario where a BPE-tokenized teacher (vocab 512) distills to students. We do not perform full KL-based teacher–student distillation; rather, we simulate tokenizer mismatch by training students under identical objectives with differing tokenizations. We compare two students:
 \begin{itemize}
@@ -503,9 +503,9 @@ We believe learned tokenization represents a fundamental shift from heuristic to
 
 \section*{Acknowledgments}
 
-This research was made possible through the use of open-source tools and publicly available datasets. The experiments were conducted on WikiText-2, and we are grateful to the authors who made this dataset available to the research community. All code and experimental results are made available at \url{https://github.com/sambhavnoobcoder/ALSE} to support reproducibility and further research in learned tokenization. We acknowledge the PyTorch team for providing the deep learning framework that enabled this work, and the broader NLP research community for establishing the foundations upon which this work builds.
+This research was made possible through the use of open-source tools and publicly available datasets. The experiments were conducted on WikiText-2, and we are grateful to the authors who made this dataset available to the research community. All code and experimental results are made publicly available\footnote{\href{https://github.com/sambhavnoobcoder/ALSE}{https://github.com/sambhavnoobcoder/ALSE}} to support reproducibility and further research in learned tokenization. We acknowledge the PyTorch team for providing the deep learning framework that enabled this work, and the broader NLP research community for establishing the foundations upon which this work builds.
 
-\bibliographystyle{plainnat}
+\bibliographystyle{unsrt}
 \bibliography{references}
 
 \clearpage
@@ -633,8 +633,7 @@ Training times on a single NVIDIA GPU:
 
 \subsection{Reproducibility}
 
-All code, configurations, and results are available at: \\
-\url{https://github.com/sambhavnoobcoder/ALSE}
+All code, configurations, and results are publicly available at \href{https://github.com/sambhavnoobcoder/ALSE}{https://github.com/sambhavnoobcoder/ALSE}.
 
 The repository includes:
 \begin{itemize}
