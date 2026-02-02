@@ -323,9 +323,23 @@ ALSE-2048 & 2048 & 147.30 & 3.38 & \textbf{2.1286} & \textbf{-22\%} \\
     \item Raw perplexity is misleading: ALSE has higher perplexity but better BPB due to greater compression.
 \end{itemize}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig1_bpb_comparison.png}
+\caption{Main results: BPB comparison between ALSE and BPE across vocabulary sizes. ALSE achieves 62\%, 24\%, and 22\% improvements at vocab sizes 128, 512, and 2048 respectively.}
+\label{fig:main_bpb}
+\end{figure}
+
 \subsection{Scaling Analysis (PATH A)}
 
 Figure \ref{fig:scaling} shows how BPB scales with vocabulary size. ALSE maintains its advantage across all tested sizes, with a clear trajectory suggesting viability at larger scales.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig2_scaling_curves.png}
+\caption{BPB scaling with vocabulary size. ALSE maintains better BPB than BPE across all tested vocabulary sizes (128, 512, 2048).}
+\label{fig:scaling}
+\end{figure}
 
 \textbf{Vocabulary Usage.} Table \ref{tab:vocab_usage} shows vocabulary usage statistics. While ALSE uses a smaller fraction of its vocabulary than BPE at large sizes (expected with limited training data), the used tokens provide superior compression efficiency.
 
@@ -375,6 +389,13 @@ Improvement & - & - & -89\% & - & \textbf{-70\%} \\
 
 \textbf{Result:} ALSE achieves \textbf{70\% better BPB} with the same modeling capacity. This empirically suggests that ALSE is not merely shifting complexity—it enables improved language modeling efficiency. The ALSE tokens provide a more effective discrete representation for the downstream model.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/fig3_lm_parity.png}
+\caption{PATH C: Large-scale LM parity with 50M parameters. ALSE achieves 70\% better BPB than BPE with identical model architectures and training.}
+\label{fig:lm_parity}
+\end{figure}
+
 \subsection{Distillation (PATH B)}
 
 A common challenge in model distillation is tokenizer mismatch: if teacher and student use different tokenizers, knowledge transfer is complicated \cite{sanh2019distilbert}. ALSE's learned tokenization can adapt to match a teacher's distribution.
@@ -402,6 +423,13 @@ Improvement & - & \textbf{-60\%} & - & -2.6\% \\
 \end{table}
 
 ALSE achieves 60\% better BPB than byte-level students, demonstrating a substantial advantage in distillation scenarios. The lack of tokenizer mismatch enables more effective knowledge transfer.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/fig4_distillation.png}
+\caption{PATH B: Distillation results showing ALSE achieves 60\% better BPB than byte-level students, eliminating tokenizer mismatch issues.}
+\label{fig:distillation}
+\end{figure}
 
 \subsection{Downstream Task: GLUE SST-2}
 
