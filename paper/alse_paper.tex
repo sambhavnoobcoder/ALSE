@@ -35,7 +35,7 @@
 \maketitle
 
 \begin{abstract}
-Tokenization is a critical preprocessing step in natural language processing, yet most modern systems rely on heuristic algorithms like Byte Pair Encoding (BPE) that operate independently of downstream model training. We introduce ALSE (Adaptive Learned Segmentation Encoder), a novel approach that learns tokenization end-to-end through vector quantization with soft segmentation and curriculum learning. Unlike BPE, ALSE jointly optimizes segmentation boundaries and discrete token representations alongside the language model, enabling adaptive tokenization that responds to modeling objectives. Through comprehensive experiments on WikiText-2, we demonstrate that ALSE achieves 62\% better bits-per-byte (BPB) than BPE at vocabulary size 128, maintains competitive performance across vocab sizes up to 2048, and critically, supports 70\% better BPB with same-capacity 50M parameter language models—proving that ALSE provides genuine modeling improvements rather than merely shifting complexity to the tokenizer. Additionally, ALSE eliminates tokenizer mismatch in distillation scenarios, achieving 60\% better BPB than byte-level students. Our deterministic amortizer enables production deployment with 1.42ms inference latency per sequence. ALSE demonstrates that learned tokenization can outperform heuristic approaches while maintaining practical viability for real-world applications.
+Tokenization is a critical preprocessing step in natural language processing, yet most modern systems rely on heuristic algorithms like Byte Pair Encoding (BPE) that operate independently of downstream model training. We introduce ALSE (Adaptive Learned Segmentation Encoder), a novel approach that learns tokenization end-to-end through vector quantization with soft segmentation and curriculum learning. Unlike BPE, ALSE jointly optimizes segmentation boundaries and discrete token representations alongside the language model, enabling adaptive tokenization that responds to modeling objectives. Through comprehensive experiments on WikiText-2, we demonstrate that ALSE achieves 62\% better bits-per-byte (BPB) than BPE at vocabulary size 128, maintains competitive performance across vocab sizes up to 2048, and critically, supports 70\% better BPB with same-capacity 50M parameter language models—providing strong evidence that ALSE enables improved modeling efficiency under identical capacity constraints rather than merely shifting complexity to the tokenizer. Additionally, ALSE eliminates tokenizer mismatch in distillation scenarios, achieving 60\% better BPB than byte-level students. Our deterministic amortizer enables production deployment with 1.42ms inference latency per sequence. ALSE demonstrates that learned tokenization can outperform heuristic approaches while maintaining practical viability for real-world applications.
 \end{abstract}
 
 \section{Introduction}
@@ -61,7 +61,7 @@ We evaluate ALSE through comprehensive experiments comparing it to BPE across mu
 \begin{itemize}
     \item We demonstrate that ALSE achieves \textbf{62\% better bits-per-byte (BPB)} than BPE at vocabulary size 128, with consistent improvements across vocab sizes up to 2048.
 
-    \item Critically, we prove that ALSE supports genuine modeling capacity by training 50M parameter language models on both BPE and ALSE tokens. With identical architectures and training, ALSE achieves \textbf{70\% better BPB}—conclusively showing that ALSE is not merely shifting complexity to the tokenizer.
+    \item Critically, we provide evidence that ALSE supports improved modeling capacity by training 50M parameter language models on both BPE and ALSE tokens. With identical architectures and training, ALSE achieves \textbf{70\% better BPB}—empirically indicating that ALSE is not merely shifting complexity to the tokenizer.
 
     \item In distillation scenarios, ALSE eliminates tokenizer mismatch between teacher and student, achieving \textbf{60\% better BPB} than byte-level students.
 
@@ -235,7 +235,7 @@ The amortizer is initialized from the trained ALSE model and fine-tuned to match
 
 \subsection{Dataset}
 
-We evaluate ALSE on WikiText-2 \citep{merity2017wikitext}, a standard language modeling benchmark containing Wikipedia articles. We use 1000 training examples ($\sim$800 train, $\sim$200 eval) to enable rapid iteration. While larger datasets would provide stronger results, WikiText-2 allows us to systematically compare ALSE and BPE under controlled conditions.
+We evaluate ALSE on WikiText-2 \citep{merity2017wikitext}, a standard language modeling benchmark containing Wikipedia articles. We use 1000 training examples ($\sim$800 train, $\sim$200 eval) to enable rapid iteration. While larger datasets would provide stronger results, WikiText-2 allows us to systematically compare ALSE and BPE under controlled conditions. We emphasize that all experiments are intentionally conducted on a small subset of WikiText-2 to enable rapid iteration and controlled comparisons; absolute perplexity values should be interpreted relative to baselines rather than as state-of-the-art results.
 
 \subsection{Baselines}
 
@@ -364,13 +364,13 @@ Improvement & - & - & -89\% & - & \textbf{-70\%} \\
 \end{tabular}
 \end{table}
 
-\textbf{Result:} ALSE achieves \textbf{70\% better BPB} with the same modeling capacity. This conclusively demonstrates that ALSE is not merely shifting complexity—it enables genuinely better language modeling. The ALSE tokens provide a more effective discrete representation for the downstream model.
+\textbf{Result:} ALSE achieves \textbf{70\% better BPB} with the same modeling capacity. This empirically suggests that ALSE is not merely shifting complexity—it enables improved language modeling efficiency. The ALSE tokens provide a more effective discrete representation for the downstream model.
 
 \subsection{Distillation (PATH B)}
 
 A common challenge in model distillation is tokenizer mismatch: if teacher and student use different tokenizers, knowledge transfer is complicated \citep{sanh2019distilbert}. ALSE's learned tokenization can adapt to match a teacher's distribution.
 
-We simulate a distillation scenario where a BPE-tokenized teacher (vocab 512) distills to students. We compare two students:
+We simulate a distillation scenario where a BPE-tokenized teacher (vocab 512) distills to students. We do not perform full KL-based teacher–student distillation; rather, we simulate tokenizer mismatch by training students under identical objectives with differing tokenizations. We compare two students:
 \begin{itemize}
     \item \textbf{Student A:} Byte-level (vocab 256, 1 byte/token)
     \item \textbf{Student B:} ALSE-tokenized (vocab 128)
@@ -490,7 +490,7 @@ We introduced ALSE, a learned tokenization system that optimizes segmentation an
 
 \begin{itemize}
     \item ALSE achieves 62\% better BPB than BPE at small vocabulary sizes, with consistent improvements across scales
-    \item Critically, 50M parameter LMs trained on ALSE tokens achieve 70\% better BPB than those trained on BPE tokens with identical architectures—proving that ALSE provides genuine modeling improvements
+    \item Critically, 50M parameter LMs trained on ALSE tokens achieve 70\% better BPB than those trained on BPE tokens with identical architectures—providing strong evidence that ALSE enables improved modeling efficiency
     \item ALSE eliminates tokenizer mismatch in distillation, achieving 60\% better BPB than byte-level students
     \item Production deployment is viable through our deterministic amortizer (1.42ms inference)
 \end{itemize}
