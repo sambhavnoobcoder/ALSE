@@ -330,7 +330,7 @@ ALSE-2048 & 2048 & 147.30 & 3.38 & \textbf{2.1286} & \textbf{-22\%} \\
 \label{fig:main_bpb}
 \end{figure}
 
-\subsection{Scaling Analysis (PATH A)}
+\subsection{Scaling Analysis}
 
 Figure \ref{fig:scaling} shows how BPB scales with vocabulary size. ALSE maintains its advantage across all tested sizes, with a clear trajectory suggesting viability at larger scales.
 
@@ -365,7 +365,7 @@ BPE-2048 & 2048 & 85.5\% \\
 
 The lower usage at vocab 2048 suggests ALSE would benefit from additional training or larger datasets. However, even with 7.4\% usage, ALSE achieves competitive BPB.
 
-\subsection{Large-Scale LM Parity (PATH C)}
+\subsection{Large-Scale LM Parity}
 
 \textbf{Critical Question:} Is ALSE just shifting complexity to the tokenizer, or does it enable better language modeling?
 
@@ -392,11 +392,11 @@ Improvement & - & - & -89\% & - & \textbf{-70\%} \\
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.6\textwidth]{figures/fig3_lm_parity.png}
-\caption{PATH C: Large-scale LM parity with 50M parameters. ALSE achieves 70\% better BPB than BPE with identical model architectures and training.}
+\caption{Large-scale LM parity with 50M parameters. ALSE achieves 70\% better BPB than BPE with identical model architectures and training.}
 \label{fig:lm_parity}
 \end{figure}
 
-\subsection{Distillation (PATH B)}
+\subsection{Distillation}
 
 A common challenge in model distillation is tokenizer mismatch: if teacher and student use different tokenizers, knowledge transfer is complicated \cite{sanh2019distilbert}. ALSE's learned tokenization can adapt to match a teacher's distribution.
 
@@ -427,7 +427,7 @@ ALSE achieves 60\% better BPB than byte-level students, demonstrating a substant
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.6\textwidth]{figures/fig4_distillation.png}
-\caption{PATH B: Distillation results showing ALSE achieves 60\% better BPB than byte-level students, eliminating tokenizer mismatch issues.}
+\caption{Distillation results showing ALSE achieves 60\% better BPB than byte-level students, eliminating tokenizer mismatch issues.}
 \label{fig:distillation}
 \end{figure}
 
