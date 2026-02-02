@@ -5,6 +5,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/15wn3SQoT8p6sR2me62DemNr8XzaXH5Id?usp=sharing)
 
 ## Overview
 
@@ -74,6 +75,14 @@ The system uses **soft segmentation with curriculum learning** to gradually tran
 | 512        | 2.1383   | 2.8145  | **-24%** ✅ |
 | 2048       | 2.1286   | 2.7461  | **-22%** ✅ |
 
+![BPB Comparison](figures/fig1_bpb_comparison.png)
+
+*Figure 1: ALSE consistently achieves better BPB than BPE across all vocabulary sizes.*
+
+![Scaling Curves](figures/fig2_scaling_curves.png)
+
+*Figure 2: ALSE maintains its BPB advantage across different vocabulary sizes, demonstrating predictable scaling.*
+
 ### Large-Scale LM Parity (50M Parameters)
 
 | Model | BPB | Improvement |
@@ -83,6 +92,10 @@ The system uses **soft segmentation with curriculum learning** to gradually tran
 
 Same architecture, same training data, same parameter count. **ALSE is not shifting complexity to the tokenizer—it enables better modeling capacity.**
 
+![LM Parity](figures/fig3_lm_parity.png)
+
+*Figure 3: 50M parameter language models show ALSE achieves 70% better BPB than BPE with identical architectures.*
+
 ### Distillation Results
 
 | Student Model | BPB | Improvement |
@@ -91,6 +104,16 @@ Same architecture, same training data, same parameter count. **ALSE is not shift
 | ALSE-tokenized | 1.3347 | **-60%** ✅ |
 
 No tokenizer mismatch between teacher and student.
+
+![Distillation Results](figures/fig4_distillation.png)
+
+*Figure 4: ALSE-tokenized students achieve significantly better BPB than byte-level students in distillation.*
+
+### Performance Summary
+
+![Comparison Matrix](figures/fig6_comparison_matrix.png)
+
+*Figure 5: Comprehensive view of ALSE's improvements over BPE across all evaluation metrics.*
 
 ## Repository Structure
 
