@@ -1,0 +1,40 @@
+# ALSE Experiment Configuration
+
+# Model hyperparameters
+model:
+  target_compression: 4.0
+  code_dim: 12
+  d_model: 64
+  n_heads: 2
+  n_layers: 2
+
+# Training settings
+training:
+  learning_rate: 5e-4
+  batch_size: 8
+  epochs: 5
+  warmup_steps: 1000
+  max_grad_norm: 1.0
+
+# Curriculum learning
+curriculum:
+  warmup_steps: 6000
+  min_strength: 0.35
+  lambda_max: 8.0
+  lambda_min: 2.0
+  lambda_warmup_steps: 7000
+
+# Data
+data:
+  dataset: wikitext-2
+  num_train_examples: 1000
+  max_seq_length: 512
+
+# Vocabulary sizes to test
+vocab_sizes: [128, 512, 2048]
+
+# Evaluation
+evaluation:
+  compute_bpb: true
+  compute_perplexity: true
+  compute_vocab_usage: true
